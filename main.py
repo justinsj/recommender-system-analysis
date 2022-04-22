@@ -229,8 +229,9 @@ def df_average(df, groupby = ['interfaceId'], delta_key = 'delta', final_key = '
 
   df_average: DataFrame (listof Str) -> DataFrame
   '''
-  results_df = df.groupby(groupby)[delta_key].mean().reset_index(name = final_key)
+  results_df = df.dropna().groupby(groupby)[delta_key].mean().reset_index(name = final_key)
   return results_df
+
 df = load_data()
 # userId, ts, taskId, interfaceId, sessionId, productId, action, addedItemsCount
 
@@ -251,14 +252,14 @@ per_user_deltas_tcts = df_deltas(
   ['userId','sessionId','taskId'],
   get_per_user_deltas,
 )
-print('per_user_deltas_ctrs:',per_user_deltas_ctrs)
-print('per_user_deltas_tcts:',per_user_deltas_tcts)
+print('per_user_deltas_ctrs:\n', per_user_deltas_ctrs)
+print('per_user_deltas_tcts:\n', per_user_deltas_tcts)
 
 # interfaceId, delta
 average_ctrs_df = df_average(per_user_deltas_ctrs, final_key = 'ctr')
 average_tcts_df = df_average(per_user_deltas_tcts, final_key = 'tct')
-print(average_ctrs_df)
-print(average_tcts_df)
+print("average_ctrs_df:\n", average_ctrs_df)
+print("average_tcts_df:\n", average_tcts_df)
 
 average_ctrs_df.to_csv('average_ctrs.csv', index=False)
 average_tcts_df.to_csv('average_tcts.csv', index=False)
