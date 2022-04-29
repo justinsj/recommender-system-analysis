@@ -5,13 +5,15 @@ import math
 
 filename = 'results.csv'
 
-def load_data():
+
+def load_data(only_keep_user_ids=[]):
   '''
   Returns a dataframe of the data.
 
   load_data: None -> DataFrame
   '''
-  return pd.read_csv(filename)
+  df = pd.read_csv(filename)
+  return df[df['userId'].isin(only_keep_user_ids)]
 
 def fix_iso_date(date):
   '''
@@ -232,7 +234,13 @@ def df_average(df, groupby = ['interfaceId'], delta_key = 'delta', final_key = '
   results_df = df.dropna().groupby(groupby)[delta_key].mean().reset_index(name = final_key)
   return results_df
 
-df = load_data()
+def df_filter(df, key='interfaceId', value='control'):
+  return df[df[key] == value]
+
+
+only_keep_user_ids = ['assk7FcTldFosGOT','ZmwCehMEVYkTvABc','aqIOl5vBVyiHztIx','zyRP3dxISmkr5zwg','dCZE5sHjyiP6zbsD','SMio6cRqi7sBGQyM','YwpjnVGQgvFPY69O','nsDMkeorNmwrIdDo','ZiCWEvAAgAiX8RZA','GXHqjkEnuiMvPoRN']
+
+df = load_data(only_keep_user_ids)
 # userId, ts, taskId, interfaceId, sessionId, productId, action, addedItemsCount
 
 individual_ctrs = get_individual_ctrs(df)
@@ -263,3 +271,13 @@ print("average_tcts_df:\n", average_tcts_df)
 
 average_ctrs_df.to_csv('average_ctrs.csv', index=False)
 average_tcts_df.to_csv('average_tcts.csv', index=False)
+
+control_ctrs = df_filter(individual_ctrs)
+control_tcts = df_filter(individual_tcts)
+
+print('average ctr: ', control_ctrs['agg'].mean())
+print('average tct: ', control_tcts['agg'].mean())
+# average_ctrs_df = df_average(individual_ctrs, final_key = 'ctr')
+# average_tcts_df = df_average(individual_tcts, final_key = 'tct')
+# print("average_ctrs_df:\n", average_ctrs_df)
+# print("average_tcts_df:\n", average_tcts_df)
