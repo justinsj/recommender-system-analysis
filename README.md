@@ -28,3 +28,17 @@ average_tcts_df:
 average ctr:  0.21142857142857138
 average tct:  51.4721
 ```
+
+## Cite
+
+To cite this project, please consider using the following bibtex:
+```
+@misc{recommender-system-analysis,
+  author = {San Juan, Justin and Chambers, Owen},
+  title = {Tailoring Product Recommendations for Mobile Devices},
+  year = {2022},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/justinsj/recommender-system-analysis}},
+}
+```
